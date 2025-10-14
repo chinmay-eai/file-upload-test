@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .upload-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .file-input {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 5px;
+            display: none;
+        }
+        .result.show {
+            display: block;
+        }
+        .file-info {
+            margin: 10px 0;
+            padding: 10px;
+            background: white;
+            border-left: 3px solid #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-container">
+        <h1>📄 File Upload Test</h1>
+        
+        <div class="file-input">
+            <label for="pdfOnly"><strong>PDF Files Only:</strong></label><br>
+            <input type="file" id="pdfOnly" accept="application/pdf">
+        </div>
+
+        <div class="file-input">
+            <label for="anyFile"><strong>Any File Type:</strong></label><br>
+            <input type="file" id="anyFile">
+        </div>
+
+        <div class="file-input">
+            <label for="multipleFiles"><strong>Multiple Files:</strong></label><br>
+            <input type="file" id="multipleFiles" multiple>
+        </div>
+
+        <button onclick="showSelectedFiles()">Show Selected Files</button>
+
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        function showSelectedFiles() {
+            const resultDiv = document.getElementById('result');
+            let html = '<h3>Selected Files:</h3>';
+            let hasFiles = false;
+
+            // Check PDF only input
+            const pdfInput = document.getElementById('pdfOnly');
+            if (pdfInput.files.length > 0) {
+                hasFiles = true;
+                html += '<div class="file-info">';
+                html += '<strong>PDF File:</strong><br>';
+                html += `Name: ${pdfInput.files[0].name}<br>`;
+                html += `Size: ${(pdfInput.files[0].size / 1024).toFixed(2)} KB<br>`;
+                html += `Type: ${pdfInput.files[0].type}`;
+                html += '</div>';
+            }
+
+            // Check any file input
+            const anyInput = document.getElementById('anyFile');
+            if (anyInput.files.length > 0) {
+                hasFiles = true;
+                html += '<div class="file-info">';
+                html += '<strong>Any File:</strong><br>';
+                html += `Name: ${anyInput.files[0].name}<br>`;
+                html += `Size: ${(anyInput.files[0].size / 1024).toFixed(2)} KB<br>`;
+                html += `Type: ${anyInput.files[0].type}`;
+                html += '</div>';
+            }
+
+            // Check multiple files input
+            const multiInput = document.getElementById('multipleFiles');
+            if (multiInput.files.length > 0) {
+                hasFiles = true;
+                html += '<div class="file-info">';
+                html += '<strong>Multiple Files:</strong><br>';
+                for (let i = 0; i < multiInput.files.length; i++) {
+                    html += `${i + 1}. ${multiInput.files[i].name} (${(multiInput.files[i].size / 1024).toFixed(2)} KB)<br>`;
+                }
+                html += '</div>';
+            }
+
+            if (!hasFiles) {
+                html += '<p>No files selected yet. Please select a file.</p>';
+            }
+
+            resultDiv.innerHTML = html;
+            resultDiv.classList.add('show');
+        }
+
+        // Auto-show files when selected
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            input.addEventListener('change', showSelectedFiles);
+        });
+    </script>
+</body>
+</html>
